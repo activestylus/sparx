@@ -1,0 +1,36 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# macOS temporary files
+*~
+.Trashes
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Xcode specific files (if applicable)
+# build/
+# *.pbxuser
+# *.mode1v3
+# *.xcuserstate
+# *.perspectivev3
+# *.xcworkspace
+# *.playground
+# *.xccheckout
+# DerivedData/
+# .idea/ (for JetBrains IDEs like AppCode)
+
+# Other common files/directories to ignore
+# node_modules/ (for Node.js projects)
+# target/ (for Java projects using Maven/Gradle)
+# dist/ (for compiled/built files)
+# .env (for environment variables)
+# *.log

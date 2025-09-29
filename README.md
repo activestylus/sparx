@@ -246,8 +246,8 @@ References:
 ```
 ## API Authentication
 
-.warning{
-  **Never commit tokens to version control.**
+>{
+  *[Never commit tokens to version control.]
 }
 
 See our [security guide]@docs/security and [API docs]@docs/api.
@@ -272,7 +272,7 @@ See the [OAuth 2.0 spec]:1 and [JWT guide]:2 for details.
 2[JWT Guide]https://jwt.io/introduction/ "Token format"
 ```
 
-**Result:** 16% shorter, semantic HTML throughout, DRY URLs, automatic citations.
+**Result:** 17% shorter, semantic HTML throughout, DRY URLs, automatic citations.
 
 ---
 

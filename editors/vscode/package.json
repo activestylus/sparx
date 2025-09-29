@@ -1,0 +1,33 @@
+{
+  "name": "sparx",
+  "displayName": "Sparx Syntax Highlighting",
+  "description": "Syntax highlighting for Sparx markup language",
+  "version": "1.0.0",
+  "publisher": "sparx",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [{
+      "id": "sparx",
+      "aliases": ["Sparx", "sparx"],
+      "extensions": [".hug", ".sparx"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "sparx",
+      "scopeName": "source.sparx",
+      "path": "../../syntaxes/sparx.tmLanguage.json"
+    }],
+    "themes": [{
+      "label": "Sparx Dark",
+      "uiTheme": "vs-dark",
+      "path": "../../themes/sparx-dark-color-theme.json"
+    }]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/activestylus/sparx"
+  }
+}

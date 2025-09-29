@@ -1,0 +1,13 @@
+{
+  "name": "Sparx",
+  "details": "https://github.com/activestylus/sparx",
+  "description": "Sparx syntax highlighting for Sublime Text",
+  "author": "yourname",
+  "releases": [
+    {
+      "sublime_text": ">=3000",
+      "tags": true
+    }
+  ],
+  "version": "1.0.0"
+}

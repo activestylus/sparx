@@ -1,0 +1,5 @@
+require_relative 'sparx/constants'
+require_relative 'sparx/inline_processor'
+require_relative 'sparx/image_processor'
+require_relative 'sparx/container_processor'
+require_relative 'sparx/parser'

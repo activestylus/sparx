@@ -1,0 +1,173 @@
+%YAML 1.2
+---
+name: Sparx
+file_extensions: [sparx, spk]
+scope: source.sparx
+
+contexts:
+  main:
+    - include: comments
+    - include: headings
+    - include: containers
+    - include: lists
+    - include: images
+    - include: links
+    - include: code
+    - include: inline-formatting
+
+  comments:
+    - match: '^\\\s.*$'
+      scope: comment.line.sparx
+
+  headings:
+    - match: '^\s*# (.+)$'
+      scope: markup.heading.1.sparx
+      
+    - match: '^\s*## (.+)$'
+      scope: markup.heading.2.sparx
+      
+    - match: '^\s*### (.+)$'
+      scope: markup.heading.3.sparx
+      
+    - match: '^\s*#### (.+)$'
+      scope: markup.heading.4.sparx
+      
+    - match: '^\s*##### (.+)$'
+      scope: markup.heading.5.sparx
+      
+    - match: '^\s*###### (.+)$'
+      scope: markup.heading.6.sparx
+
+  containers:
+    - match: '^\s*\$\[([a-zA-Z][a-zA-Z0-9_-]*)\]\{'
+      scope: meta.container.section.sparx
+      push: container-section
+      
+    - match: '^\s*>(?:\[([^\]]+)\])?\{'
+      scope: meta.container.blockquote.sparx
+      push: container-blockquote
+      
+    - match: '^\s*\.([a-zA-Z0-9_-]+)\{'
+      scope: meta.container.div.sparx
+      push: container-div
+      
+    - match: '^\s*~\{'
+      scope: meta.container.aside.sparx
+      push: container-aside
+      
+    - match: '^\s*f\[([^\]]+)\]\{'
+      scope: meta.container.figure.sparx
+      push: container-figure
+      
+    - match: '^\s*\+\[([^\]]+)\]\{'
+      scope: meta.container.details.sparx
+      push: container-details
+
+  container-section:
+    - meta_scope: meta.container.section.sparx
+    - match: '^\s*\}' 
+      scope: meta.container.section.sparx
+      pop: true
+    - include: containers
+    - include: main
+
+  container-blockquote:
+    - meta_scope: meta.container.blockquote.sparx
+    - match: '^\s*\}' 
+      scope: meta.container.blockquote.sparx
+      pop: true
+    - include: containers
+    - include: main
+
+  container-div:
+    - meta_scope: meta.container.div.sparx
+    - match: '^\s*\}' 
+      scope: meta.container.div.sparx
+      pop: true
+    - include: containers
+    - include: main
+
+  container-aside:
+    - meta_scope: meta.container.aside.sparx
+    - match: '^\s*\}' 
+      scope: meta.container.aside.sparx
+      pop: true
+    - include: containers
+    - include: main
+
+  container-figure:
+    - meta_scope: meta.container.figure.sparx
+    - match: '^\s*\}' 
+      scope: meta.container.figure.sparx
+      pop: true
+    - include: containers
+    - include: main
+
+  container-details:
+    - meta_scope: meta.container.details.sparx
+    - match: '^\s*\}' 
+      scope: meta.container.details.sparx
+      pop: true
+    - include: containers
+    - include: main
+
+  lists:
+    - match: '^\s*(-+)\s+(.+)$'
+      scope: markup.list.unnumbered.sparx
+      
+    - match: '^\s*(\++)\s+(.+)$'
+      scope: markup.list.numbered.sparx
+      
+    - match: '^\s*(:+)([^:]+):\s*(.*)$'
+      scope: meta.list.definition.sparx
+
+  images:
+    - match: '^\s*src\[([^\]]+)\](.+)$'
+      scope: meta.image.responsive.sparx
+      
+    - match: '([*\/-]*)i\[([^\]]+)\](@[a-zA-Z0-9_-]+)?([^=\s]+)(?:=(\d+x\d+))?'
+      scope: meta.image.inline.sparx
+
+  links:
+    - match: '([*\/-]*)\[([^\]]+)\](@[a-zA-Z0-9_-]+)'
+      scope: meta.link.citation.sparx
+      
+    - match: '([*\/-]*)\[([^\]]+)\]:(\d+)'
+      scope: meta.link.numbered-citation.sparx
+      
+    - match: '([*\/-]*)\[([^\]]+)\]((?:\/[a-zA-Z0-9]|[a-zA-Z0-9]+:\/\/|www\.|#|(?:tel|mailto|sms|facetime|skype|whatsapp|geo|zoom|spotify|vscode):)([^\s\[\]^]*))(\^[a-zA-Z0-9_]*)?'
+      scope: meta.link.inline.sparx
+
+  code:
+    - match: '^```(\w+)?$'
+      push: code-block
+      
+    - match: '`([^`]+)`'
+      scope: markup.raw.inline.sparx
+
+  code-block:
+    - meta_scope: meta.embedded.block.sparx
+    - match: '^```$'
+      pop: true
+
+  inline-formatting:
+    - match: '\*\[([^\]]+)\]'
+      scope: markup.bold.sparx
+      
+    - match: '/\[([^\]]+)\]'
+      scope: markup.italic.sparx
+      
+    - match: '-\[([^\]]+)\]'
+      scope: markup.strikethrough.sparx
+      
+    - match: '\*/\[([^\]]+)\]'
+      scope: markup.bold.italic.sparx
+      
+    - match: '/\*\[([^\]]+)\]'
+      scope: markup.italic.bold.sparx
+      
+    - match: 's\[([^\]]+)\]'
+      scope: markup.small.sparx
+      
+    - match: '\.([a-zA-Z0-9_-]+)\[([^\]]+)\]'
+      scope: markup.span.class.sparx

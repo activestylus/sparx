@@ -1,0 +1,135 @@
+{
+  "name": "Sparx",
+  "scopeName": "source.sparx",
+  "fileTypes": ["sparx", "spk"],
+  "patterns": [
+    {"include": "#comments"},
+    {"include": "#headings"},
+    {"include": "#containers"},
+    {"include": "#lists"},
+    {"include": "#images"},
+    {"include": "#links"},
+    {"include": "#code"},
+    {"include": "#inline-formatting"}
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "match": "^#\\s.*$",
+          "name": "comment.line.sparx"
+        }
+      ]
+    },
+    "headings": {
+      "patterns": [
+        {
+          "match": "^\\s*# (.+)$",
+          "name": "markup.heading.1.sparx"
+        },
+        {
+          "match": "^\\s*## (.+)$",
+          "name": "markup.heading.2.sparx"
+        },
+        {
+          "match": "^\\s*### (.+)$",
+          "name": "markup.heading.3.sparx"
+        },
+        {
+          "match": "^\\s*#### (.+)$",
+          "name": "markup.heading.4.sparx"
+        },
+        {
+          "match": "^\\s*##### (.+)$",
+          "name": "markup.heading.5.sparx"
+        },
+        {
+          "match": "^\\s*###### (.+)$",
+          "name": "markup.heading.6.sparx"
+        }
+      ]
+    },
+    "containers": {
+      "patterns": [
+        {
+          "begin": "^\\s*\\$\\[([a-zA-Z][a-zA-Z0-9_-]*)\\]\\{",
+          "end": "^\\s*\\}",
+          "name": "meta.container.section.sparx",
+          "patterns": [
+            {"include": "#containers"},
+            {"include": "$self"}
+          ]
+        },
+        {
+          "begin": "^\\s*\\.([a-zA-Z0-9_-]+)\\{",
+          "end": "^\\s*\\}",
+          "name": "meta.container.div.sparx",
+          "patterns": [
+            {"include": "#containers"},
+            {"include": "$self"}
+          ]
+        },
+        {
+          "begin": "^\\s*~\\{",
+          "end": "^\\s*\\}",
+          "name": "meta.container.aside.sparx",
+          "patterns": [
+            {"include": "#containers"},
+            {"include": "$self"}
+          ]
+        },
+        {
+          "begin": "^\\s*f\\[([^\\]]+)\\]\\{",
+          "end": "^\\s*\\}",
+          "name": "meta.container.figure.sparx",
+          "patterns": [
+            {"include": "#containers"},
+            {"include": "$self"}
+          ]
+        }
+      ]
+    },
+    "inline-formatting": {
+      "patterns": [
+        {
+          "match": "\\*\\[([^\\]]+)\\]",
+          "name": "markup.bold.sparx"
+        },
+        {
+          "match": "/\\[([^\\]]+)\\]",
+          "name": "markup.italic.sparx"
+        },
+        {
+          "match": "-\\[([^\\]]+)\\]",
+          "name": "markup.strikethrough.sparx"
+        }
+      ]
+    },
+    "images": {
+      "patterns": [
+        {
+          "match": "^\\s*src\\[([^\\]]+)\\](.+)$",
+          "name": "meta.image.responsive.sparx"
+        },
+        {
+          "match": "([*\\/-]*)i\\[([^\\]]+)\\](@[a-zA-Z0-9_-]+)?([^=\\s]+)(?:=(\\d+x\\d+))?",
+          "name": "meta.image.inline.sparx"
+        }
+      ]
+    },
+    "code": {
+      "patterns": [
+        {
+          "begin": "```(\\w+)?",
+          "end": "```",
+          "name": "markup.raw.code-fence.sparx",
+          "contentName": "meta.embedded.code.sparx"
+        },
+        {
+          "match": "`([^`]+)`",
+          "name": "markup.raw.inline-code.sparx"
+        }
+      ]
+    }
+  }
+}

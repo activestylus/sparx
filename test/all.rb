@@ -1,0 +1,7 @@
+require_relative "basic_test"
+require_relative "container_test"
+require_relative "integration_test"
+require_relative "list_test"
+require_relative "block_test"
+require_relative "image_test"
+require_relative "link_test"

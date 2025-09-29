@@ -1,0 +1,133 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/sparx'
+require 'listen'
+
+# --- Configuration ---
+WATCH_INTERVAL = 0.5 # Debounce interval for listen
+
+# --- Helper Methods ---
+
+def display_help
+  puts <<~HELP
+    Sparx CLI - Markup that sparks joy ✨
+
+    Usage:
+      sparx convert <input.sx> [output.html] [--safe]
+      sparx watch <directory>
+      sparx init
+      sparx version
+      sparx help
+
+    Options:
+      --safe, -s  Enable safe mode for user-generated content
+
+    Examples:
+      sparx convert blog.sx                      # Output to stdout
+      sparx convert blog.sx blog.html            # Output to file
+      sparx convert comments.sx --safe           # Safe mode for user content
+      sparx watch docs/                          # Auto-convert files in docs/
+  HELP
+end
+
+def process_file(file, output_file, safe_mode)
+  begin
+    content = File.read(file)
+    html = Sparx.parse(content, safe: safe_mode)
+
+    if output_file
+      File.write(output_file, html)
+      puts "✅ Converted #{File.basename(file)} -> #{File.basename(output_file)}"
+    else
+      # Output to stdout only if a single file is being processed in non-watch mode
+      puts html
+    end
+  rescue StandardError => e
+    puts "❌ Error processing #{file}: #{e.message}"
+    exit 1 unless output_file # Exit if in single-convert mode
+  end
+end
+
+# --- Main Logic ---
+
+command = ARGV[0] || 'help'
+options = ARGV[1..-1] || []
+
+# Parse common options
+safe_mode = options.include?('--safe') || options.include?('-s')
+options.delete('--safe')
+options.delete('-s')
+
+case command
+when 'convert'
+  input_file = options[0]
+  output_file = options[1]
+
+  unless input_file && File.exist?(input_file)
+    puts "File not found: #{input_file}"
+    exit 1
+  end
+
+  process_file(input_file, output_file, safe_mode)
+
+when 'watch'
+  dir = options[0]
+  
+  unless dir && File.directory?(dir)
+    puts "Directory not found or specified: #{dir}"
+    exit 1
+  end
+  
+  puts "✨ Sparx Watch Mode: Watching #{dir} for changes..."
+  puts "   (Press Ctrl+C to stop)"
+  
+  # Set up the listener
+  listener = Listen.to(dir, only: /\.sx\z/i, latency: WATCH_INTERVAL) do |modified, added, removed|
+    
+    # Process modified and added files
+    (modified + added).each do |file_path|
+      # Generate output path (e.g., input/doc.sx -> output/doc.html)
+      output_path = file_path.sub(/\.sx\z/i, '.html') 
+      process_file(file_path, output_path, safe_mode)
+    end
+    
+    # Handle removed files (optional, but good practice)
+    removed.each do |file_path|
+      puts "🗑️ File removed: #{File.basename(file_path)}"
+      # You could add logic here to delete the corresponding HTML file
+    end
+  end
+  
+  listener.start
+  sleep # Keep the main thread alive until Ctrl+C is pressed
+
+when 'init'
+  sample_content = <<~SPARKDOWN
+    # Welcome to Sparx
+
+    This is a */[sample document] to get you started.
+
+    i[Sparx Logo]https://placehold.co/400x200/EEE/31343C?text=Sparx
+
+    +[Quick Start]{
+      - Install: \`gem install sparx\`
+      - Convert: \`sparx convert sample.sx\`
+      - Learn: https://sparx.dev/docs
+    }
+  SPARKDOWN
+
+  File.write('sample.sx', sample_content)
+  puts "Created sample.sx - try: sparx convert sample.sx"
+
+when 'version'
+  # Assuming Sparx::VERSION is defined in your main library file
+  puts "Sparx #{Sparx::VERSION}" 
+
+when 'help', '--help', '-h'
+  display_help
+
+else
+  puts "Unknown command: #{command}"
+  display_help
+  exit 1
+end

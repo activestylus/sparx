@@ -53,23 +53,6 @@ Same result. Half the characters. Semantic HTML throughout. URLs defined once.
 
 ## Installation & Usage
 
-### With Joys Framework
-```ruby
-gem install sparx
-
-class ArticlePage < Joys::Component
-  def initialize(content)
-    @html = Sparx.parse(content)
-  end
-
-  def template
-    article do
-      unsafe_raw @html  # Already sanitized and semantic
-    end
-  end
-end
-```
-
 ### Standalone
 ```ruby
 gem install sparx
@@ -77,6 +60,25 @@ require 'sparx'
 
 html = Sparx.parse(your_content)
 ```
+
+### With Joys Framework
+```ruby
+gem install sparx
+
+Joys::Config.markup_parser = ->(content) { 
+  Sparx.parse(content, safe: true)
+}
+
+# In your template:
+
+div? "This is *[awesome]!"
+
+# Adding the ? to any dom method gets you automatic parsing!
+```
+
+Note: If you love ruby template engines and haven't heard of **Joys**, then you're in for a treat!
+
+**[Visit Joys on Github](https://github.com/activestylus/joys)**
 
 ---
 

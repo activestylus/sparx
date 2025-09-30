@@ -1,3 +1,6 @@
+
+![sparx](https://github.com/user-attachments/assets/2039be6f-3294-422e-bcb6-e73d373d5018)
+
 # Sparx - Markup That Sparks Joy ⚡
 
 **Markdown was revolutionary in 2004. It's 2025. Time for the next evolution.**

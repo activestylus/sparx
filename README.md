@@ -1,28 +1,30 @@
-# Sparx - Markup That Sparks Joy
+# Sparx - Markup That Sparks Joy ⚡
 
 **Markdown was revolutionary in 2004. It's 2025. Time for the next evolution.**
 
-Born from the same "spark joy" philosophy as the **[Joys](https://github.com/activestylus/joys)** view engine, Sparx eliminates the daily frustrations that developers face, thanks to its clean syntax, semantic HTML and zero compromise on ergonomics and features.
+Born from the same "spark joy" philosophy as the **[Joys](https://github.com/activestylus/joys)** view engine, Sparx eliminates the daily frustrations that make developers want to scream at their markup. Clean syntax. Semantic HTML. Zero compromise.
 
 ---
 
-## The Problem With Markdown
+## ⚡ Why Sparx Exists
+
+### The Problem With Markdown
 
 After 20 years, we're still fighting the same battles:
+
 - `**bold**` vs `__bold__` vs `*italic*` confusion
-- Broken nesting in complex formatting
+- Broken nesting: `[link with **bold**](url)` → broken markup
 - HTML soup whenever you need anything semantic
-- Copying URLs everywhere like it's 1999
+- Copy-pasting URLs everywhere like it's 1999
 - Zero support for modern responsive images
+- Tables that require ASCII art skills
 - Academic citations? Good luck.
 
-**Sparx** solves every single one of these problems.
+**Sparx solves every single one of these problems.**
 
----
+### Quick Taste: Before & After
 
-## Quick Taste: Before & After
-
-### The Old Way (Markdown)
+**Markdown:**
 ```markdown
 **Bold** and *italic* with [broken **nesting**](https://example.com).
 
@@ -34,8 +36,8 @@ More HTML soup when you need structure.
 </details>
 ```
 
-### The Sparx Way
-```sparx
+**Sparx:**
+```markdown
 *[Bold] and /[italic] with perfect */[nesting]https://example.com.
 
 i[Image]@cdn/image.jpg
@@ -47,18 +49,81 @@ i[Image]@cdn/image.jpg
 @cdn: https://cdn.example.com/very/long/path/
 ```
 
-Same result. Half the characters. Semantic HTML throughout. URLs defined once.
+```html
+<strong>Bold</strong> and <em>italic</em> with <strong><em><a href="https://example.com">nesting</a></em></strong>.
+
+<img src="https://cdn.example.com/very/long/path/image.jpg" alt="Image">
+
+<details>
+<summary>Advanced Content</summary>
+<p>Clean structure without HTML soup.</p>
+</details>
+```
+
+**Same result. 17% fewer characters. Semantic HTML throughout. URLs defined once.**
 
 ---
 
-## Installation & Usage
+## 🎯 Quick Reference
+
+### Text Formatting
+```markdown
+*[bold] /[italic] -[strikethrough] `code`
+s[small text] .highlight[styled span]
+*/[bold italic] -[strikethrough *[with bold]]  # Perfect nesting!
+```
+
+### Links (So Much Better!)
+```markdown
+[Simple link]https://example.com
+[Link with title|Hover text]https://example.com
+[External link]https://example.com^
+*/[Bold italic link]https://example.com        # Formatted links!
+[Call us]tel:+1-555-0123                       # Protocol links
+```
+
+### Media & Code
+```markdown
+i[Alt text]image.jpg
+i[Alt|Title]image.jpg=300x200
+
+```ruby
+def hello = "Multiline Code"
+```
+
+`One line of code`
+```
+
+### Containers & Structure
+```markdown
+$[section-id]{ content }                       # Sections
+.[class-name]{ content }                       # Divs
+>{ content }                                   # Blockquotes  
++[Summary]{ content }                          # Details/Summary
+:term: definition                              # Definition lists
+```
+
+### References
+```markdown
+[Link text]@reference                          # URL references
+[Citation]:1                                   # Numbered citations
+@reference: https://example.com "Title"        # Define once
+1[Source]https://example.com "Description"     # Citation definition
+```
+
+---
+
+## 🚀 Installation & Usage
 
 ### Standalone
+
 ```ruby
 gem install sparx
 require 'sparx'
 
 html = Sparx.parse(your_content)
+# Use safe mode for user-generated content:
+html = Sparx.parse(user_content, safe: true)
 ```
 
 ### With Joys Framework
@@ -70,228 +135,196 @@ Joys::Config.markup_parser = ->(content) {
 }
 
 # In your template:
-
 div? "This is *[awesome]!"
-
-# Adding the ? to any dom method gets you automatic parsing!
+# Adding ? to any DOM method enables automatic parsing!
 ```
 
-Note: If you love ruby template engines and haven't heard of **Joys**, then you're in for a treat!
+**Love Ruby templates?** You're in for a treat! **[Joys](https://github.com/activestylus/joys)** is the view engine that renders 100x faster than ERB and makes building UI components an absolute joy.
 
-**[Visit Joys on Github](https://github.com/activestylus/joys)**
+### Command Line
+```bash
+sparx convert document.sparx
+sparx convert document.sparx --safe
+sparx convert input.sparx output.html
+```
+
+**File extensions:** `.sparx` or `.sx`
 
 ---
 
-## Core Philosophy: Consistency Over Convention
+## 📝 Core Syntax Deep Dive
 
-### Logical, Predictable Formatting
+### Text Formatting That Makes Sense
+Every formatting element follows the same pattern: `symbol[content]`. No exceptions. No edge cases.
 
-**Input:**
+```markdown
+*[bold text]
+/[italic text]  
+-[strikethrough text]
+s[small text]
+.[class-name][styled text]
+`inline code`
 ```
-*[bold] /[italic] -[deleted] `code`
-*/[bold italic] -*[bold deleted] 
-```
 
-**Output:**
 ```html
-<strong>bold</strong> <em>italic</em> <del>deleted</del> <code>code</code>
-<strong><em>bold italic</em></strong> <del><strong>bold deleted</strong></del>
+<strong>bold text</strong>
+<em>italic text</em>  
+<del>strikethrough text</del>
+<small>small text</small>
+<span class="class-name">styled text</span>
+<code>inline code</code>
 ```
 
-Every formatting element follows the same pattern: `symbol[content]`. No exceptions. No edge cases. Perfect nesting every time.
+### The Magic of Perfect Nesting
+```markdown
+*/[bold italic] -[strikethrough *[with bold]]
+```
+
+```html
+<strong><em>bold italic</em></strong> <del><strong>with bold</strong></del>
+```
+
+No more broken `[link with **bold**](url)` - it just works!
 
 ### Links That Don't Break Your Flow
-
-**Input:**
-```
-[GitHub]https://github.com
-[Docs|Complete documentation]@docs^
-[Call us]tel:+1-555-0199
-
-@docs: https://sparx.dev/docs
-```
-
-**Output:**
-```html
-<a href="https://github.com">GitHub</a>
-<a href="https://sparx.dev/docs" title="Complete documentation" target="_blank">Docs</a>
-<a href="tel:+1-555-0199">Call us</a>
-```
-
-Links, tooltips, targets, and protocols all work the same way. Define URLs once with `@references`, use them everywhere.
-
----
-
-## Where Sparx Shines: Complex Content
-
-### Responsive Images (Finally!)
-
-**Basic responsive images:**
-```
-i[Hero]hero.jpg 400w|hero@2x.jpg 800w|hero@3x.jpg 1200w
-```
-
-**Art direction with format fallbacks:**
-```
-src[>800px]desktop.{webp,jpg}
-src[>400px]tablet.{webp,jpg}
-i[Hero]mobile.jpg
-```
-
-**Output:**
-```html
-<picture>
-  <source srcset="desktop.webp" type="image/webp" media="(min-width: 800px)">
-  <source srcset="desktop.jpg" type="image/jpeg" media="(min-width: 800px)">
-  <source srcset="tablet.webp" type="image/webp" media="(min-width: 400px)">
-  <source srcset="tablet.jpg" type="image/jpeg" media="(min-width: 400px)">
-  <img src="mobile.jpg" alt="Hero">
-</picture>
-```
-
-One input. Perfect responsive HTML5. Try doing this in Markdown!
-
-### Semantic Containers
-
-You can create linkable sections with very simple syntax:
-
-`$[dom-id] { fully parseable content }`
-
-**Input:**
-```
-$[hero]{
-  # Welcome to */[the future]@site
-
-  >{
-    Finally, markup that doesn't make me want to scream.
-    - Every developer who tries Sparx
-  }
-
-  .warning{
-    This will change how you think about markup.
-  }
-
-  +[Technical Details]{
-    :Performance: 100x faster parsing than traditional regex approaches
-    :Output: Clean, semantic HTML5 throughout
-    :DRY: URL references eliminate repetition
-  }
-}
-
-@site: https://sparx.dev
-```
-
-**Output:**
-```html
-<section id="hero">
-<h1>Welcome to <strong><em><a href="https://sparx.dev">the future</a></em></strong></h1>
-<blockquote>
-<p>Finally, markup that doesn't make me want to scream.</p>
-<p>- Every developer who tries Sparx</p>
-</blockquote>
-<div class="warning">
-<p>This will change how you think about markup.</p>
-</div>
-<details>
-<summary>Technical Details</summary>
-<dl>
-<dt>Performance</dt><dd>100x faster parsing than traditional regex approaches</dd>
-<dt>Output</dt><dd>Clean, semantic HTML5 throughout</dd>
-<dt>DRY</dt><dd>URL references eliminate repetition</dd>
-</dl>
-</details>
-</section>
-```
-
-Every element generates proper semantic HTML. Your accessibility audits will love you.
-
-Links to these sections can then be easily created:
-
-`[Go To Hero]#hero`
-
----
-
-## Real-World Comparison
-
-### Documentation Page: Markdown vs Sparx
-
-**Markdown approach:**
 ```markdown
-## API Authentication
-
-> **Warning:** Never commit tokens to version control.
-
-See our [security guide](https://docs.example.com/security) and 
-[API docs](https://docs.example.com/api).
-
-<details>
-<summary>Troubleshooting</summary>
-
-**Token Issues:**
-- Check for whitespace
-- Verify token type
-
-**Expired Tokens:**
-- Tokens expire in 30 days
-- Generate new ones [here](https://app.example.com/tokens)
-
-</details>
-
-References:
-1. [OAuth 2.0](https://tools.ietf.org/html/rfc6749) - Official spec
-2. [JWT Guide](https://jwt.io/introduction/) - Token format
+[Simple link]https://example.com
+[Link with title|Hover text]https://example.com
+[External link]https://example.com^
+[Custom target]https://example.com^myframe
+*/[Bold italic link]https://example.com
 ```
 
-**Sparx approach:**
-```
-## API Authentication
-
->{
-  *[Never commit tokens to version control.]
-}
-
-See our [security guide]@docs/security and [API docs]@docs/api.
-
-+[Troubleshooting]{
-  :Token Issues:{
-    - Check for whitespace  
-    - Verify token type
-  }
-  :Expired Tokens:{
-    - Tokens expire in 30 days
-    - Generate new ones [here]@app/tokens
-  }
-}
-
-See the [OAuth 2.0 spec]:1 and [JWT guide]:2 for details.
-
-@docs: https://docs.example.com
-@app: https://app.example.com
-
-1[OAuth 2.0]https://tools.ietf.org/html/rfc6749 "Official spec"
-2[JWT Guide]https://jwt.io/introduction/ "Token format"
+```html
+<a href="https://example.com">Simple link</a>
+<a href="https://example.com" title="Hover text">Link with title</a>
+<a href="https://example.com" target="_blank">External link</a>
+<a href="https://example.com" target="myframe">Custom target</a>
+<strong><em><a href="https://example.com">Bold italic link</a></em></strong>
 ```
 
-**Result:** 17% shorter, semantic HTML throughout, DRY URLs, automatic citations.
+### Protocol Links Built-In
+```markdown
+[Call us]tel:+1-555-0123
+[Email team]mailto:dev@example.com
+[Text us]sms:+1-555-0123
+[Location]geo:40.7128,-74.0060
+[Open in VS Code]vscode://file/path
+```
+
+**Supported protocols:** `tel:`, `mailto:`, `sms:`, `facetime:`, `skype:`, `whatsapp:`, `zoom:`, `spotify:`, `vscode:`, `geo:`
+
+### URL References (DRY Principle)
+Define once, use everywhere:
+
+```markdown
+[Documentation]@docs and [API Reference]@docs/api
+
+@docs: https://sparkdown.dev/docs "Complete Documentation"
+```
+
+```html
+<a href="https://sparkdown.dev/docs" title="Complete Documentation">Documentation</a> and <a href="https://sparkdown.dev/docs/api">API Reference</a>
+```
+
+Change your domain? Update one line. It's that simple.
 
 ---
 
-## Advanced Features
+## 🏗️ Building Blocks
 
-### Academic Citations
+### Sections with Automatic IDs
+```markdown
+$[introduction]{
+  # Welcome to Sparx
+  
+  This content is in a semantic section.
+}
+
+[Jump to intro]#introduction
 ```
-Research shows[significant performance gains]:1 in modern applications.
 
-1[Performance Study]https://journal.example.com "Peer-reviewed research"
+```html
+<section id="introduction">
+  <h1>Welcome to Sparx</h1>
+  <p>This content is in a semantic section.</p>
+</section>
+<a href="#introduction">Jump to intro</a>
 ```
 
-Automatic numbering, proper linking, and citation sections.
+### Blockquotes with Citations
+```markdown
+>{
+  This is a simple blockquote.
+}
 
-### Complex Lists
+>[https://source.com]{
+  This blockquote has a semantic citation.
+}
 ```
+
+```html
+<blockquote>
+  <p>This is a simple blockquote.</p>
+</blockquote>
+
+<blockquote cite="https://source.com">
+  <p>This blockquote has a semantic citation.</p>
+</blockquote>
+```
+
+### Styled Divs
+```markdown
+.highlight{
+  This content is in a highlighted div.
+}
+
+.warning[This is a short warning]
+```
+
+```html
+<div class="highlight">
+  <p>This content is in a highlighted div.</p>
+</div>
+
+<div class="warning">This is a short warning</div>
+```
+
+### Semantic Asides
+```markdown
+~{
+  This is aside content, properly marked up for screen readers.
+}
+```
+
+```html
+<aside>
+  <p>This is aside content, properly marked up for screen readers.</p>
+</aside>
+```
+
+---
+
+## 📚 Advanced Content Structures
+
+### Lists That Actually Work
+
+**Simple Lists:**
+```markdown
+- Item one
+- Item two
+- Item three
+
++ First item  
++ Second item
++ Third item
+```
+
+**Complex List Items:**
+```markdown
 - Simple item
 -{
-  ## Complex item with full formatting
+  ## Complex item with full power
   
   Complete *[markup support], [links]@docs, and more.
   
@@ -302,41 +335,167 @@ Automatic numbering, proper linking, and citation sections.
 - Back to simple
 ```
 
-Try nesting a blockquote inside a Markdown list item. I'll wait.
-
-### Protocol Links
+```html
+<ul>
+  <li>Simple item</li>
+  <li>
+    <h2>Complex item with full power</h2>
+    <p>Complete <strong>markup support</strong>, <a href="https://sparkdown.dev/docs">links</a>, and more.</p>
+    <blockquote>
+      <p>Even blockquotes work perfectly inside lists.</p>
+    </blockquote>
+  </li>
+  <li>Back to simple</li>
+</ul>
 ```
-[Email us]mailto:hello@example.com
-[Call support]tel:+1-555-0199
-[Text us]sms:+1-555-0199
-[Video chat]facetime:user@example.com
-[Open in VS Code]vscode://file/path/to/file
+
+### Definition Lists
+```markdown
+:HTML: HyperText Markup Language
+:CSS: Cascading Style Sheets
+:JavaScript:{
+  A programming language for interactive web content.
+  
+  Used by *[billions] of websites worldwide.
+}
 ```
 
-Built-in support for `tel:`, `mailto:`, `sms:`, `facetime:`, `skype:`, `whatsapp:`, `zoom:`, `spotify:`, `vscode:`, and `geo:` protocols.
+```html
+<dl>
+  <dt>HTML</dt>
+  <dd>HyperText Markup Language</dd>
+  <dt>CSS</dt>
+  <dd>Cascading Style Sheets</dd>
+  <dt>JavaScript</dt>
+  <dd>
+    <p>A programming language for interactive web content.</p>
+    <p>Used by <strong>billions</strong> of websites worldwide.</p>
+  </dd>
+</dl>
+```
+
+### Details/Summary
+```markdown
++[Click to expand]{
+  This content is hidden by default.
+  
+  - List items work
+  - *[Formatting] works
+  - [Links]https://example.com work
+}
+```
+
+```html
+<details>
+  <summary>Click to expand</summary>
+  <p>This content is hidden by default.</p>
+  <ul>
+    <li>List items work</li>
+    <li><strong>Formatting</strong> works</li>
+    <li><a href="https://example.com">Links</a> work</li>
+  </ul>
+</details>
+```
+
+### Figures with Captions
+```markdown
+f[Figure 1: Architecture Diagram]{
+  i[System components]diagram.png
+  
+  The diagram shows our microservices architecture
+  and how they communicate via REST APIs.
+}
+```
+
+```html
+<figure>
+  <img src="diagram.png" alt="System components">
+  <p>The diagram shows our microservices architecture and how they communicate via REST APIs.</p>
+  <figcaption>Figure 1: Architecture Diagram</figcaption>
+</figure>
+```
 
 ---
 
-## Security: Safe Mode
+## 🖼️ Responsive Images Made Simple
 
-Processing user-generated content? Sparx's safe mode protects against XSS while preserving all formatting functionality.
+### Basic Responsive Images
+```markdown
+i[Hero]hero.jpg 400w|hero@2x.jpg 800w|hero@3x.jpg 1200w
+```
+
+```html
+<img src="hero.jpg" 
+     srcset="hero.jpg 400w, hero@2x.jpg 800w, hero@3x.jpg 1200w" 
+     alt="Hero">
+```
+
+### Art Direction
+```markdown
+src[>1024px]desktop.jpg
+src[>768px]tablet.jpg
+i[Hero]mobile.jpg
+```
+
+```html
+<picture>
+  <source srcset="desktop.jpg" media="(min-width: 1024px)">
+  <source srcset="tablet.jpg" media="(min-width: 768px)">
+  <img src="mobile.jpg" alt="Hero">
+</picture>
+```
+
+### Format Switching
+```markdown
+src[>800px]image.{webp,jpg}
+i[Fallback]image.jpg
+```
+
+```html
+<picture>
+  <source srcset="image.webp" type="image/webp" media="(min-width: 800px)">
+  <source srcset="image.jpg" type="image/jpeg" media="(min-width: 800px)">
+  <img src="image.jpg" alt="Fallback">
+</picture>
+```
+
+---
+
+## 📚 Academic Features
+
+### Citations
+```markdown
+Research indicates[performance improvements]:1 in modern systems.
+
+1[Important Study]https://journal.com/study "Peer-reviewed research"
+```
+
+```html
+<p>Research indicates<a href="#cite-1">performance improvements<sup>1</sup></a> in modern systems.</p>
+
+<section class="citations">
+  <cite id="cite-1"><span class="cite-number">1</span> <a href="https://journal.com/study" title="Peer-reviewed research">Important Study</a></cite>
+</section>
+```
+
+---
+
+## 🛡️ Security
 
 ```ruby
-# Safe mode ON - for user content
+# Safe mode for user-generated content
 html = Sparx.parse(user_content, safe: true)
-
-# Safe mode OFF - for trusted content  
-html = Sparx.parse(trusted_content)
 ```
 
-Automatically escapes HTML tags, blocks dangerous protocols (`javascript:`, `data:`), and sanitizes attributes while preserving code blocks exactly as written.
+**Safe mode automatically:**
+- Escapes HTML tags (`<script>` → `&lt;script&gt;`)
+- Blocks dangerous protocols (`javascript:`, `data:`, `vbscript:`)
+- Sanitizes attribute values
+- Preserves code blocks exactly as written
 
 ---
-## Performance
 
-Sparx prioritizes developer experience and semantic output over raw speed. While pure Markdown parsers like Redcarpet are faster for basic formatting, Sparx delivers significantly more functionality:
-
-### Performance Benchmarks
+## ⚡ Performance
 
 Sparx balances speed with advanced functionality. While pure Markdown parsers prioritize raw throughput, Sparx generates semantic HTML5 with features impossible in traditional markup languages.
 
@@ -391,31 +550,10 @@ Sparx balances speed with advanced functionality. While pure Markdown parsers pr
 | Definition Lists | ❌ | ✅ | ❌ | **✅** |
 | Perfect Nesting | ❌ | ❌ | ❌ | **✅** |
 
-### Real-World Performance
-
-For typical use cases, Sparx's parsing time is negligible:
-
-- **Blog post** (746 chars): **0.22ms** to parse
-- **Documentation** (2.3K chars): **0.69ms** to parse  
-- **Long content** (27K chars): **2.19ms** to parse
-
-The development time saved by consistent syntax and semantic output far outweighs the microseconds spent parsing.
-
-## Bottom Line
-
-**Choose based on your needs:**
-
-- **Need raw speed only?** Redcarpet is unbeatable for basic Markdown
-- **Need features + reasonable speed?** Sparx delivers 2x better performance than Kramdown with 10x more functionality
-- **Building semantic, accessible content?** Sparx is the only option that generates proper HTML5 throughout
-
-*Performance measured in iterations per second. Higher is better. Memory usage measured as RSS delta during parsing.*
-
-Conclusion: For most real-world use cases, the parsing time is negligible compared to the development time saved by cleaner syntax and semantic output.
 
 ---
 
-## When to Use Sparx
+## 🎯 When to Use Sparx
 
 **Perfect for:**
 - Technical documentation requiring semantic structure
@@ -431,7 +569,7 @@ Conclusion: For most real-world use cases, the parsing time is negligible compar
 
 ---
 
-## The Bottom Line
+## 🎊 The Bottom Line
 
 Markdown taught us that writing shouldn't require thinking about HTML. Sparx teaches us that **developers** shouldn't need to compromise on semantic markup quality.
 

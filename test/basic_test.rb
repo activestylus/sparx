@@ -43,6 +43,18 @@ class TestBasicSparx < Minitest::Test
     assert_match %r{<strong><a href="https://example.com">bold link</a></strong>}, output
   end
 
+  def test_home_link
+    input = "[home]/"
+    output = Sparx.parse(input)
+    assert_match %r{<a href="/">home</a>}, output
+  end
+
+  def test_bold_home_link
+    input = "*[home]/"
+    output = Sparx.parse(input)
+    assert_match %r{<strong><a href="/">home</a></strong>}, output
+  end
+
   def test_bold_italic_link
     input = "*/[bold italic link]https://example.org"
     output = Sparx.parse(input)

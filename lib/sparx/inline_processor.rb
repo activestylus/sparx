@@ -4,7 +4,7 @@ module Sparx
   ESCAPE_ATTR = {'"' => '&quot;', "'" => '&#39;', '<' => '&lt;', '>' => '&gt;'}.freeze
   STANDALONE = /([*\/-]+)\[([^\[\]]*)\]/.freeze
   HEADING = /^(\#{1,6})(?!\#)\s+(.+)$/.freeze
-  LINK_FORMAT =/([*\/-]*)\[([^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*?)\](\/[a-zA-Z0-9]|[a-zA-Z0-9]+:\/\/|www\.|@|#|(?:tel|mailto|sms|facetime|skype|whatsapp|geo|zoom|spotify|vscode):)([^\s\[\]^]*)(\^[a-zA-Z0-9_]*)?/.freeze
+  LINK_FORMAT =/([*\/-]*)\[([^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*?)\](\/|[a-zA-Z0-9]+:\/\/|www\.|@|#|(?:tel|mailto|sms|facetime|skype|whatsapp|geo|zoom|spotify|vscode):)([^\s\[\]^]*)(\^[a-zA-Z0-9_]*)?/.freeze
   BRACKETS1 = /([*\/-]+)\[([^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*)\]/.freeze
   BRACKETS2 =  /([*\/-]+)\[([^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*)\]/.freeze
   CITATIONS = /([*\/-]*)\[([^\[\]]+?)\]@([a-zA-Z0-9_-]+)/.freeze
@@ -49,14 +49,9 @@ def self.process_links_with_formatting(content, citations, numbered_citations, r
   end
 end
 def self.valid_url?(url_prefix, url_suffix)
-  return false if url_prefix == "/" && (url_suffix.empty? || url_suffix =~ /^[.,;!?]/)
+  return !url_suffix.match(/^[.,;!?]/) if url_prefix == "/"  # Remove length check
   full_url = "#{url_prefix}#{url_suffix}"
-  return false if full_url.length <= 1
-  if full_url =~ /^([a-zA-Z]+):/i
-    return SAFE_PROTOCOLS.include?($1.downcase)
-  end
-  
-  true
+  full_url.length > 1
 end
   def self.process_standalone_formatting(content, recursive_processor = nil)
     content.gsub(STANDALONE) do
